@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String,
-    default: "YOUR_DEFAULT_AVATAR_URL",
+    default: "https://static.vecteezy.com/system/resources/previews/004/511/281/non_2x/default-avatar-photo-placeholder-profile-picture-vector.jpg",
   },
   followers: {
     type: Array,
@@ -35,7 +35,7 @@ const UserSchema = new mongoose.Schema({
   },
   followings: {
     type: Array,
-    default: [],
+    default: ['elie'],
   },
   role: {
     type: String,

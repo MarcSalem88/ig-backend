@@ -9,6 +9,7 @@ const User = require("../Models/userModel");
 //     res.status(403).json("You are not allowed to delete this user!");
 //   }
 // };
+
 const updateUser = async (req, res) => {
   if (req.user._id === req.params.id || req.user.role === "admin") {
     if (req.body.password) {
@@ -247,7 +248,7 @@ const searchUsers = async (req, res) => {
   }
 };
 module.exports = {
-  deleteUser,
+ 
   updateUser,
   getUser,
   getFollowings,

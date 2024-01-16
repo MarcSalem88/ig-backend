@@ -46,18 +46,16 @@ const login = async (req, res) => {
         message: "password is incorrect",
       });
     }
-    const accessToken = generateToken.generateAccessToken(user);
-    const refreshToken = generateToken.generateRefreshToken(user);
-    await User.findByIdAndUpdate(user._id, {
-      jwtToken: refreshToken,
-    });
-    const { jwtToken, password: newpass, ...other } = user._doc;
+    // const accessToken = generateToken.generateAccessToken(user);
+    // const refreshToken = generateToken.generateRefreshToken(user);
+    // await User.findByIdAndUpdate(user._id, {
+    //   jwtToken: refreshToken,
+    // });
+    const {password: newpass, ...other } = user._doc;
     res.status(200).send({
       status: "success",
       message: "logged in successfully",
       data: other,
-      accessToken,
-      refreshToken,
     });
   } catch (e) {
     res.status(500).send({
@@ -159,10 +157,37 @@ const refresh = async (req, res) => {
   }
 };
 
+const upload = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    // Update the user's profile picture in the database
+    let userId = req.headers["user-id"];
+   
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profilePicture: req.file.buffer }, // Assuming you want to store the image as a Buffer
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Respond with the updated user object or any other necessary information
+    res.json({ imageUrl: user.profilePicture });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 module.exports = {
   signup,
   login,
   logout,
   verify,
   refresh,
+  upload,
 };
